@@ -30,6 +30,13 @@ import org.odftoolkit.odfdom.dom.attribute.fo.FoBorderLeftAttribute;
 import org.odftoolkit.odfdom.dom.attribute.fo.FoBorderRightAttribute;
 import org.odftoolkit.odfdom.dom.attribute.fo.FoBorderTopAttribute;
 import org.odftoolkit.odfdom.dom.attribute.fo.FoWrapOptionAttribute;
+
+import org.odftoolkit.odfdom.dom.attribute.fo.FoPaddingBottomAttribute;
+import org.odftoolkit.odfdom.dom.attribute.fo.FoPaddingLeftAttribute;
+import org.odftoolkit.odfdom.dom.attribute.fo.FoPaddingRightAttribute;
+import org.odftoolkit.odfdom.dom.attribute.fo.FoPaddingTopAttribute;
+import org.odftoolkit.odfdom.dom.attribute.fo.FoPaddingAttribute;
+
 import org.odftoolkit.odfdom.dom.attribute.style.StyleBorderLineWidthAttribute;
 import org.odftoolkit.odfdom.dom.attribute.style.StyleBorderLineWidthBottomAttribute;
 import org.odftoolkit.odfdom.dom.attribute.style.StyleBorderLineWidthLeftAttribute;
@@ -45,6 +52,8 @@ import org.odftoolkit.odfdom.dom.element.OdfStylePropertiesBase;
 import org.odftoolkit.odfdom.dom.element.style.StyleTableCellPropertiesElement;
 import org.odftoolkit.odfdom.dom.style.props.OdfStylePropertiesSet;
 import org.odftoolkit.odfdom.type.Color;
+import org.odftoolkit.odfdom.type.Length;
+import org.odftoolkit.odfdom.type.Length.Unit;
 
 /**
  * This class represents the table cell style settings. It provides methods to
@@ -58,6 +67,9 @@ import org.odftoolkit.odfdom.type.Color;
  * @since 0.3
  */
 public class TableCellProperties {
+    
+    // the default size as used for left-, right-padding.
+    private static final String DEFAULT_LENGTH = "0in";
 
 	// fo:background-color
 	// fo:border
@@ -662,6 +674,172 @@ public class TableCellProperties {
 		else
 			return null;
 	}
+
+	/**
+	 * Returns the provided Millimeter value as Inch value
+	 * 
+	 * @param value the value to set the attribute value to (in Millimeter)
+	 */
+	private static String getInchValue(double value) {
+		// build the string for mm
+		final String mmValueString = value + Unit.MILLIMETER.abbr();
+		// convert the length to inch
+		final String inchValueString = Length.mapToUnit(mmValueString,
+				Unit.INCH);
+
+		// return the value
+		return inchValueString;
+	}
+
+    /**
+     * Set the padding of this <code>TableCellProperties</code>
+     *
+     * @param padding the size of the  padding (in Millimeter)
+     */
+    public void setPadding(double padding) {
+        if (padding == 0) {
+            mElement.removeAttribute(FoPaddingAttribute.ATTRIBUTE_NAME.getQName());
+        } else {
+            mElement.setFoPaddingAttribute(getInchValue(padding));
+        }
+    }
+
+    /**
+     * Get the size of the padding of this <code>TableCellProperties</code>
+     *
+     * @return the size of the padding (in Millimeter)
+     */
+    public double getPadding() {
+        // get the value
+        String valueString = mElement.getFoPaddingAttribute();
+        // check if a value was returned
+        if (valueString == null) {
+            // if not use the default length
+            valueString = DEFAULT_LENGTH;
+        }
+        // return the converted value
+        return Length.parseDouble(valueString, Unit.MILLIMETER);
+    }
+
+    /**
+     * Set the left padding of this <code>TableCellProperties</code>
+     *
+     * @param paddingLeft the size of the left padding (in Millimeter)
+     */
+    public void setPaddingLeft(double paddingLeft) {
+        if (paddingLeft == 0) {
+            mElement.removeAttribute(FoPaddingLeftAttribute.ATTRIBUTE_NAME.getQName());
+        } else {
+            mElement.setFoPaddingLeftAttribute(getInchValue(paddingLeft));
+        }
+    }
+
+    /**
+     * Get the size of the left padding of this <code>TableCellProperties</code>
+     *
+     * @return the size of the left padding (in Millimeter)
+     */
+    public double getPaddingLeft() {
+        // get the value
+        String valueString = mElement.getFoPaddingLeftAttribute();
+        // check if a value was returned
+        if (valueString == null) {
+            // if not use the default length
+            valueString = DEFAULT_LENGTH;
+        }
+        // return the converted value
+        return Length.parseDouble(valueString, Unit.MILLIMETER);
+    }
+
+    /**
+     * Set the right padding of this <code>TableCellProperties</code>
+     *
+     * @param paddingRight the size of the right padding (in Millimeter)
+     */
+    public void setPaddingRight(double paddingRight) {
+        if (paddingRight == 0) {
+            mElement.removeAttribute(FoPaddingRightAttribute.ATTRIBUTE_NAME.getQName());
+        } else {
+            mElement.setFoPaddingRightAttribute(getInchValue(paddingRight));
+        }
+    }
+
+    /**
+     * Get the size of the right padding of this <code>TableCellProperties</code>
+     *
+     * @return the size of the right padding (in Millimeter)
+     */
+    public double getPaddingRight() {
+        // get the value
+        String valueString = mElement.getFoPaddingRightAttribute();
+        // check if a value was returned
+        if (valueString == null) {
+            // if not use the default length
+            valueString = DEFAULT_LENGTH;
+        }
+        // return the converted value
+        return Length.parseDouble(valueString, Unit.MILLIMETER);
+    }
+
+    /**
+     * Set the top padding of this <code>TableCellProperties</code>
+     *
+     * @param paddingTop the size of the top padding (in Millimeter)
+     */
+    public void setPaddingTop(double paddingTop) {
+        if (paddingTop == 0) {
+            mElement.removeAttribute(FoPaddingTopAttribute.ATTRIBUTE_NAME.getQName());
+        } else {
+            mElement.setFoPaddingTopAttribute(getInchValue(paddingTop));
+        }
+    }
+
+    /**
+     * Get the size of the top padding of this <code>TableCellProperties</code>
+     *
+     * @return the size of the top padding (in Millimeter)
+     */
+    public double getPaddingTop() {
+        // get the value
+        String valueString = mElement.getFoPaddingTopAttribute();
+        // check if a value was returned
+        if (valueString == null) {
+            // if not use the default length
+            valueString = DEFAULT_LENGTH;
+        }
+        // return the converted value
+        return Length.parseDouble(valueString, Unit.MILLIMETER);
+    }
+
+    /**
+     * Set the bottom padding of this <code>TableCellProperties</code>
+     *
+     * @param paddingBottom the size of the bottom padding (in Millimeter)
+     */
+    public void setPaddingBottom(double paddingBottom) {
+        if (paddingBottom == 0) {
+            mElement.removeAttribute(FoPaddingBottomAttribute.ATTRIBUTE_NAME.getQName());
+        } else {
+            mElement.setFoPaddingBottomAttribute(getInchValue(paddingBottom));
+        }
+    }
+
+    /**
+     * Get the size of the bottom padding of this <code>TableCellProperties</code>
+     *
+     * @return the size of the bottom padding (in Millimeter)
+     */
+    public double getPaddingBottom() {
+        // get the value
+        String valueString = mElement.getFoPaddingBottomAttribute();
+        // check if a value was returned
+        if (valueString == null) {
+            // if not use the default length
+            valueString = DEFAULT_LENGTH;
+        }
+        // return the converted value
+        return Length.parseDouble(valueString, Unit.MILLIMETER);
+    }
 
 }
 
